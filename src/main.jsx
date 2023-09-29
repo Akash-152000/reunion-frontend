@@ -6,7 +6,6 @@ import { Route, createBrowserRouter, createRoutesFromChildren, RouterProvider } 
 import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import Home from './components/Home.jsx'
-import UserProvider from './context/User/UserProvider.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -22,8 +21,6 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <UserProvider>
       <RouterProvider router={router} />
-    </UserProvider>
   </React.StrictMode>,
 )

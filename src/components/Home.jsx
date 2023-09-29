@@ -2,8 +2,10 @@ import React from 'react'
 import heroImage from '../assets/heroImage.jpg'
 import SearchTab from './SearchTab'
 import Header from './Header'
+import PropertyList from './PropertyList'
 
 const Home = () => {
+    
     return (
         <>
             <Header />
@@ -16,6 +18,7 @@ const Home = () => {
                         <SearchTab />
                     </div>
                 </div>
+                <PropertyList/>
             </div>
 
         </>
