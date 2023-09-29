@@ -20,13 +20,12 @@ const UserProvider = (props) => {
           password,
           role: "owner",
         }
-      ).catch((error) => {
+      ).then((data) => {
+        navigate('/')
+      }).catch((error) => {
         console.log(error);
       });
-      if(response.data.success){
-        setToken(response.date.token)
-        navigate('/')
-      }
+
     }
   };
 
@@ -36,21 +35,21 @@ const UserProvider = (props) => {
     }).catch((error) => {
       console.log(error);
     });
-    if(response.data.success){
+    if (response.data.success) {
       setToken(response.data.token)
       navigate('/')
     }
   };
 
-  const logout = async()=>{
+  const logout = async () => {
     console.log("entry");
-    const response = await axios.get(`${backendUrl}/logout`).then((data)=>{
+    const response = await axios.get(`${backendUrl}/logout`).then((data) => {
       console.log("logged out");
       setToken('')
     })
-    .catch((error)=>{
-      console.log(error);
-    })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   return (
