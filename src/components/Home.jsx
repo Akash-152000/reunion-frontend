@@ -1,10 +1,12 @@
 import React from 'react'
 import heroImage from '../assets/heroImage.jpg'
 import SearchTab from './SearchTab'
+import Header from './Header'
 
 const Home = () => {
     return (
         <>
+            <Header />
             <div className='w-100 h-[100vh]'>
                 <img className='object-cover w-full h-full' src={heroImage} alt="Hero Image" />
 

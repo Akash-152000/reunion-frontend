@@ -15,12 +15,15 @@ const UserProvider = (props) => {
       ).catch((error)=>{
         console.log(error);
       });
+      console.log(response)
     }
   };
 
   const login = async () => {};
 
   return (
-    <UserContext.Provider value={{}}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{signup}}>{props.children}</UserContext.Provider>
   );
 };
+
+export default UserProvider;
