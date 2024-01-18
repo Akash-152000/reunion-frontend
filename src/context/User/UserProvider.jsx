@@ -11,10 +11,10 @@ const UserProvider = (props) => {
   const [user, setUser] = useState('')
   const navigate = useNavigate()
 
-  const signup = async ({ name,address, email, phone, password }, isOwner) => {
+  const signup = async ({ name, address, email, phone, password }, isOwner) => {
     try {
       let response;
-  
+
       if (isOwner) {
         response = await axios.post(`${backendUrl}/signup`, {
           name,
@@ -34,7 +34,7 @@ const UserProvider = (props) => {
           role: "user",
         });
       }
-  
+
       if (response.data.success) {
         Cookies.set('token', response.data.token);
         setIsLoggedIn(true);
@@ -90,9 +90,26 @@ const UserProvider = (props) => {
         setIsLoggedIn(false)
       });
   }
+
+  const updateUser = async ({ name = '', phone = '', email = '', address = '' }) => {
+
+    const payload = {};
+    if (name) payload.name = name;
+    if (phone) payload.phone = phone;
+    if (email) payload.email = email;
+    if (address) payload.address = address;
+
+    const response = await axios.post(`${backendUrl}/updateuser`, {
+      payload
+    }, { withCredentials: true }).then((data) => {
+      setUser(data.data)
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
+
   useEffect(() => {
     if (Cookies.get('token')) {
-      console.log('got token');
       myProfile()
     }
 
@@ -100,7 +117,7 @@ const UserProvider = (props) => {
   }, [isLoggedIn])
 
   return (
-    <UserContext.Provider value={{ signup, login, user, logout, isLoggedIn }}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ signup, login, user, logout, isLoggedIn, updateUser }}>{props.children}</UserContext.Provider>
   );
 };
 

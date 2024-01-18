@@ -2,8 +2,13 @@ import React, { useContext, useState } from 'react'
 import UserDetails from './UserDetails'
 import AddProperty from './AddProperty'
 import UpdateProperty from './UpdateProperty'
+import UserContext from '../context/User/UserContext'
 
 function MyProfile() {
+
+    const context = useContext(UserContext)
+    const { user } = context
+
     const [activeComponent, setActiveComponent] = useState('default')
 
     const showUserDetailsComponent = () => {
@@ -25,24 +30,26 @@ function MyProfile() {
 
 
     return (
-        <div className='bg-[#9fc5d8] flex'>
+        <div className='bg-[#9fc5d8] h-[100vh] flex'>
             <div className='m-[20px] '>
                 <button onClick={showUserDetailsComponent} className='flex justify-center border py-[20px] hover:bg-[#abbbd4] w-[300px] cursor-pointer'>
                     Your Details
                 </button>
-                <button onClick={showAddPropertyComponent} className='flex justify-center border py-[20px] hover:bg-[#abbbd4]  w-[300px] cursor-pointer'>
+                {user.user.role === "owner" ? <button onClick={showAddPropertyComponent} className='flex justify-center border py-[20px] hover:bg-[#abbbd4]  w-[300px] cursor-pointer'>
                     Add Property
-                </button>
-                <button onClick={showUpdatepropertyComponent} className='flex justify-center border py-[20px] hover:bg-[#abbbd4]  w-[300px] cursor-pointer'>
+                </button> : <></>}
+
+                {user.user.role === 'owner' ? <button onClick={showUpdatepropertyComponent} className='flex justify-center border py-[20px] hover:bg-[#abbbd4]  w-[300px] cursor-pointer'>
                     Update Your Propertes
-                </button>
+                </button> : <></>}
+
 
             </div>
 
-            {activeComponent === 'default'&& <UserDetails/>}
-            {activeComponent === 'userDetailsComponent'&& <UserDetails/>}
-            {activeComponent === 'addPropertyComponent'&& <AddProperty/>}
-            {activeComponent === 'updatepropertyComponent'&& <UpdateProperty/>}
+            {activeComponent === 'default' && <UserDetails />}
+            {activeComponent === 'userDetailsComponent' && <UserDetails />}
+            {activeComponent === 'addPropertyComponent' && <AddProperty />}
+            {activeComponent === 'updatepropertyComponent' && <UpdateProperty />}
 
 
 

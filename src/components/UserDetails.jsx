@@ -6,9 +6,9 @@ import UserContext from '../context/User/UserContext'
 function UserDetails() {
 
     const context = useContext(UserContext)
-    const { user } = context
+    const { user, updateUser } = context
 
-    const [loading,setLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
     const [editName, setEditName] = useState(false)
     const [editPhone, setEditPhone] = useState(false)
     const [editEmail, setEditEmail] = useState(false)
@@ -16,36 +16,67 @@ function UserDetails() {
 
 
 
-    const [credentials, setCredentials] = useState({ name: "", email: "", phone: "", address: ""})
+    const [credentials, setCredentials] = useState({ name: "", email: "", phone: "", address: "" })
 
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
-        setIsOwner(!isOwner)
     }
 
-    useEffect(()=>{
-        if(user){
+    const handleEdit = (data)=>{
+        if(data==='name'){
+            setEditName(!editName)
+            setCredentials({ ...credentials, name: '' });
+        }
+        if(data==='phone'){
+            setEditPhone(!editPhone)
+            setCredentials({...credentials,phone:""})
+        }
+        if(data==='email'){
+            setEditEmail(!editEmail)
+            setCredentials({...credentials,email:""})
+        }
+        if(data==='address'){
+            setEditAddress(!editAddress)
+            setCredentials({...credentials,address:""})
+        }
+        
+    }
+
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        await updateUser(credentials)
+        if(editName)setEditName(!editName)
+        if(editPhone)setEditPhone(!editPhone)
+        if(editEmail)setEditEmail(!editEmail)
+        if(editAddress)setEditAddress(!editAddress)
+        setCredentials({...credentials,name:'',phone:'',email:'',address:''})
+
+    }
+
+    useEffect(() => {
+        if (user) {
             setLoading(false)
         }
     })
 
-    if(loading){
-        return(
+    if (loading) {
+        return (
             <div>Loading...</div>
         )
     }
 
-  return (
-    <div className='w-full'>
-                <div className='mt-6 flex justify-center'>
-                    <div className=''>
-                        <div className='w-[100px] h-[100px] '>
-                            <img className='rounded-full' src={userImage} alt="" />
-                        </div>
-                        <span className='pt-2 cursor-pointer flex justify-center'><i className="fa-solid fa-pencil"></i> </span>
+    return (
+        <div className='w-full'>
+            <div className='mt-6 flex justify-center'>
+                <div className=''>
+                    <div className='w-[100px] h-[100px] '>
+                        <img className='rounded-full' src={userImage} alt="" />
                     </div>
+                    <span className='pt-2 cursor-pointer flex justify-center'><i className="fa-solid fa-pencil"></i> </span>
                 </div>
+            </div>
 
+            <form onSubmit={handleSubmit} className='flex-col w-full items-center'>
                 <div className='w-full mt-[40px]'>
                     <div className='flex justify-around'>
                         {editName
@@ -59,7 +90,7 @@ function UserDetails() {
                                     value={credentials.name}
                                     onChange={onChange}
                                     required
-                                /><span className='cursor-pointer pl-2' onClick={() => setEditName(!editName)}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('name')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                             </div>
                             :
                             <div>
@@ -78,11 +109,11 @@ function UserDetails() {
                                     value={credentials.phone}
                                     onChange={onChange}
                                     required
-                                /><span className='cursor-pointer pl-2' onClick={() => setEditPhone(!editPhone)}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('phone')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                             </div>
                             :
                             <div>
-                                <b>Phone:</b> Phone<span className='pl-2 cursor-pointer' onClick={() => setEditPhone(!editPhone)}><i className="fa-solid fa-pencil"></i> </span>
+                                <b>Phone:</b> {user.user.phone}<span className='pl-2 cursor-pointer' onClick={() => setEditPhone(!editPhone)}><i className="fa-solid fa-pencil"></i> </span>
                             </div>
                         }
 
@@ -90,7 +121,7 @@ function UserDetails() {
                 </div>
                 <div className='w-full mt-[40px]'>
                     <div className='flex justify-around'>
-                    {editEmail
+                        {editEmail
                             ?
                             <div><b>Email: </b>
                                 <input
@@ -101,7 +132,7 @@ function UserDetails() {
                                     value={credentials.email}
                                     onChange={onChange}
                                     required
-                                /><span className='cursor-pointer pl-2' onClick={() => setEditEmail(!editEmail)}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('email')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                             </div>
                             :
                             <div>
@@ -119,22 +150,23 @@ function UserDetails() {
                                     value={credentials.address}
                                     onChange={onChange}
                                     required
-                                /><span className='cursor-pointer pl-2' onClick={() => setEditAddress(!editAddress)}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('address')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                             </div>
                             :
                             <div>
-                                <b>Address:</b> Adresss<span className='pl-2 cursor-pointer' onClick={() => setEditAddress(!editAddress)}><i className="fa-solid fa-pencil"></i> </span>
+                                <b>Address:</b> {user.user.address}<span className='pl-2 cursor-pointer' onClick={() => setEditAddress(!editAddress)}><i className="fa-solid fa-pencil"></i> </span>
                             </div>
                         }
                     </div>
                 </div>
-                <div className='w-full mt-[40px] mb-[60px]'>
-                    <div className='flex justify-around'>
-                        <button className='mx-2 px-4 py-2 rounded-lg text-white bg-[#0073e1]'>Update</button>
-                    </div>
-                </div>
-            </div>
-  )
+                {
+                    credentials.name === "" && credentials.phone==="" && credentials.email==="" && credentials.address==="" ? <></>
+                        : <button type='submit' className='mt-10 px-[40px] py-2 rounded-lg text-white bg-[#0073e1] hover:bg-[#1c344a]'>Update</button>
+                }
+            </form>
+        </div>
+
+    )
 }
 
 export default UserDetails

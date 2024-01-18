@@ -14,7 +14,6 @@ const Header = () => {
         <Link to='/'>
           <div className='cursor-pointer font-medium'>Home</div>
         </Link>
-        {console.log(isLoggedIn)}
         {!isLoggedIn ?
           <div className='flex'>
             <Link to='/signup'>
