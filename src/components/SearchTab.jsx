@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from './Button'
 
 const SearchTab = () => {
     return (
@@ -9,7 +8,7 @@ const SearchTab = () => {
                     <div className='flex flex-col px-5 py-2 border-r-2 '>
                         <label className='mb-2 text-[#868686]' htmlFor="city">City</label>
                         <select className='cursor-pointer font-bold' name="city" id="city">
-                            <option value="none" selected disabled hidden>Select location</option>
+                            <option value="none" disabled hidden>Select location</option>
                             <option value="mumbai">Mumbai</option>
                             <option value="delhi">Delhi</option>
                             <option value="Jaipur">Jaipur</option>
@@ -24,7 +23,7 @@ const SearchTab = () => {
                         <label className='mb-2 text-[#868686]' htmlFor="city">Price</label>
                         <input className='cursor-pointer font-bold w-[200px]' type="range" id="price" name="vol" min="0" max="50" />
                     </div>
-                    <div className='flex flex-col px-5 py-2 border-r-2'>
+                    {/* <div className='flex flex-col px-5 py-2 border-r-2'>
                         <label className='mb-2 text-[#868686]' htmlFor="city">City</label>
                         <select className='cursor-pointer font-bold' name="city" id="city">
                             <option value="mumbai">Mumbai</option>
@@ -32,11 +31,11 @@ const SearchTab = () => {
                             <option value="Jaipur">Jaipur</option>
                             <option value="kolkata">Kolkata</option>
                         </select>
-                    </div>
+                    </div> */}
                     <div className='flex flex-col px-5 py-2 border-r-2'>
                         <label className='mb-2 text-[#868686]' htmlFor="city">Property type</label>
                         <select className='cursor-pointer font-bold' name="city" id="city">
-                            <option value="none" selected disabled hidden>Select property type</option>
+                            <option value="none" disabled hidden>Select property type</option>
                             <option value="mumbai">1bhk</option>
                             <option value="delhi">2bhk</option>
                             <option value="Jaipur">3bhk</option>
@@ -44,7 +43,7 @@ const SearchTab = () => {
                         </select>
                     </div>
                     <div className='flex flex-col px-5 py-2  '>
-                        <Button btnName="Search" />
+                        <button className='mx-2 px-4 py-2 rounded-lg text-white bg-[#0073e1]'>Search</button>
                     </div>
 
                 </form>

@@ -8,7 +8,6 @@ const Home = () => {
     
     return (
         <>
-            <Header />
             <div className='w-100 h-[100vh]'>
                 <img className='object-cover w-full h-full' src={heroImage} alt="Hero Image" />
 

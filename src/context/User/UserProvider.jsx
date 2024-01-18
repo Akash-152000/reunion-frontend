@@ -2,58 +2,105 @@ import axios from "axios";
 import UserContext from "./UserContext";
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const UserProvider = (props) => {
   const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_API
-  const [token, setToken] = useState('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState('')
   const navigate = useNavigate()
 
-  const signup = async ({ name, email, password, isOwner }) => {
-    if (isOwner) {
-      const response = await axios.post(
-        `${backendUrl}/signup`,
-        {
+  const signup = async ({ name,address, email, phone, password }, isOwner) => {
+    try {
+      let response;
+  
+      if (isOwner) {
+        response = await axios.post(`${backendUrl}/signup`, {
           name,
+          address,
           email,
+          phone,
           password,
           role: "owner",
-        }
-      ).then((data) => {
-        navigate('/')
-      }).catch((error) => {
-        console.log(error);
-      });
-
+        });
+      } else {
+        response = await axios.post(`${backendUrl}/signup`, {
+          name,
+          address,
+          email,
+          phone,
+          password,
+          role: "user",
+        });
+      }
+  
+      if (response.data.success) {
+        Cookies.set('token', response.data.token);
+        setIsLoggedIn(true);
+        setUser(response.data);
+        navigate('/');
+      } else {
+        // Handle unsuccessful signup, e.g., show an error message
+        console.log('Signup failed:', response.data.message);
+      }
+    } catch (error) {
+      // Handle any unexpected errors
+      console.error('An error occurred during signup:', error);
     }
   };
 
   const login = async ({ email, password }) => {
     const response = await axios.post(`${backendUrl}/login`, {
       email, password
-    }).catch((error) => {
-      console.log(error);
-    });
-    if (response.data.success) {
-      setToken(response.data.token)
-      navigate('/')
-    }
+    }).then((data) => {
+      if (data.data.success) {
+        Cookies.set('token', data.data.token)
+        setUser(data.data)
+        navigate('/')
+        setIsLoggedIn(true)
+      }
+    })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const logout = async () => {
-    console.log("entry");
     const response = await axios.get(`${backendUrl}/logout`).then((data) => {
-      console.log("logged out");
-      setToken('')
+      setUser('')
+      Cookies.remove('token');
+      setIsLoggedIn(false)
+      navigate('/')
     })
       .catch((error) => {
         console.log(error);
       })
   }
 
+  const myProfile = async () => {
+    const response = await axios.get(`${backendUrl}/myprofile`, { withCredentials: true }).then((data) => {
+      if (data.data.success) {
+        setUser(data.data)
+        setIsLoggedIn(true)
+      }
+    })
+      .catch((error) => {
+        console.log(error);
+        setIsLoggedIn(false)
+      });
+  }
+  useEffect(() => {
+    if (Cookies.get('token')) {
+      console.log('got token');
+      myProfile()
+    }
+
+
+  }, [isLoggedIn])
+
   return (
-    <UserContext.Provider value={{ signup, login, token, logout }}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ signup, login, user, logout, isLoggedIn }}>{props.children}</UserContext.Provider>
   );
 };
 
