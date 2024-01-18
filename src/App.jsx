@@ -7,14 +7,14 @@ import PropertyProvider from "./context/Property/PropertyProvider"
 function App() {
 
   return (
-    <>
+    <div className="font-poppins">
       <UserProvider>
       <PropertyProvider>
         <Header />
         <Outlet />
       </PropertyProvider>
       </UserProvider>
-    </>
+    </div>
   )
 }
 

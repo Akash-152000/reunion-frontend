@@ -1,28 +1,38 @@
 import React from 'react'
 
-const PropertyCard = ({price, propertyName, propertyAddress,city,state,propertyType,toilets}) => {
-  return (
-    <>
-        <div className='mt-6 rounded-lg border p-1'>
-            <div className='flex justify-center'>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU"  alt="" />
+const PropertyCard = ({ price, propertyName, propertyAddress, city, state, propertyType, toilets, rooms }) => {
+    return (
+        <>
+
+            <div className='w-[300px] '>
+                <div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU" alt="" />
+                </div>
+                <div className='border-b-[2px] border-l-[2px] border-r-[2px] border-[#33691E] px-[20px] py-[50px]'>
+                    <div className='flex justify-between'>
+                        <div className='font-semibold text-[16px]'><i className="fa-solid fa-indian-rupee-sign"></i> {price}</div>
+                        <div className='cursor-pointer'><i className="fa-solid fa-heart"></i></div>
+                    </div>
+                    <div className='flex my-2'>
+                        <div className='font-semibold text-[16px]'>{propertyName}</div>
+                    </div>
+                    <div>
+                        <div className='font-medium text-[#575656] text-[14px]'>{propertyAddress}</div>
+                        <div className='font-medium text-[#575656] text-[14px]'>{city}</div>
+                        <div className='font-medium text-[#575656] text-[14px]'>{state}</div>
+                    </div>
+                    <div className='flex justify-between my-[20px] py-[10px] border-b-[1px] border-t-[1px] border-[#33691E]'>
+                        <div>{rooms} <i className="fa-solid fa-bed" style={{ color: "#33691e" }}></i></div>
+                        <div>{toilets} <i className="fa-solid fa-toilet" style={{ color: "#33691e" }}></i> </div>
+                        <div>{propertyType} <i className="fa-solid fa-house" style={{ color: "#33691e" }}></i></div>
+                    </div>
+                    <div className='w-full flex justify-center'>
+                        <button className='mt-2 px-[40px] py-2 rounded-lg text-white bg-[#33691e] hover:bg-[#1c344a]'>View</button>
+                    </div>
+                </div>
             </div>
-            <div className='px-3 mt-2'> 
-                <p className='text-xl font-bold '>{propertyName}</p>
-            </div>
-            <div className='px-3 mt-2'>
-                <p><i className="fa-solid fa-indian-rupee-sign " style={{"color": "#0073e1"}}></i><span className='font-bold text-[#0073e1]'>{price}</span>/month</p>
-            </div>
-            <div className='flex px-3 mt-2'>
-                <p>{propertyAddress},{city},{state}</p>
-            </div>
-            <div className='flex px-3 mt-2 items-center justify-around'>
-                <p><i className="fa-sharp fa-solid fa-house" style={{"color": "#0073e1"}}></i>{propertyType}</p>
-                <p><i className="fa-solid fa-toilet" style={{"color": "#0073e1"}}></i>{toilets}</p>
-            </div>
-        </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default PropertyCard
