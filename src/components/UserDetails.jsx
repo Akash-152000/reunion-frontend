@@ -66,7 +66,7 @@ function UserDetails() {
     }
 
     return (
-        <div className='w-full'>
+        <div className=' w-[80vw] border m-1'>
             <div className='mt-6 flex justify-center'>
                 <div className=''>
                     <div className='w-[100px] h-[100px] '>

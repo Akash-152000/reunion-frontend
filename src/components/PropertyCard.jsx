@@ -4,11 +4,11 @@ const PropertyCard = ({ price, propertyName, propertyAddress, city, state, prope
     return (
         <>
 
-            <div className='w-[300px] '>
+            <div className='w-[200px] '>
                 <div>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU" alt="" />
                 </div>
-                <div className='border-b-[2px] border-l-[2px] border-r-[2px] border-[#33691E] px-[20px] py-[50px]'>
+                <div className='border-b-[2px] border-l-[2px] border-r-[2px] border-[#33691E] px-[20px] py-[20px]'>
                     <div className='flex justify-between'>
                         <div className='font-semibold text-[16px]'><i className="fa-solid fa-indian-rupee-sign"></i> {price}</div>
                         <div className='cursor-pointer'><i className="fa-solid fa-heart"></i></div>

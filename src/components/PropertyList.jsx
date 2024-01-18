@@ -11,7 +11,7 @@ const PropertyList = () => {
     return (
         <>
             <div className='flex justify-center items-center mt-[100px]'>
-                <div className='grid grid-cols-3 gap-6'>
+                <div className='grid grid-cols-5 gap-6'>
                     {
                         properties.map((item) => {
                             return (

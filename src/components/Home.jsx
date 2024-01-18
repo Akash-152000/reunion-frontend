@@ -5,7 +5,7 @@ import Header from './Header'
 import PropertyList from './PropertyList'
 
 const Home = () => {
-    
+
     return (
         <>
             <div className='w-100 h-[100vh]'>
@@ -17,7 +17,9 @@ const Home = () => {
                         <SearchTab />
                     </div>
                 </div>
-                <PropertyList/>
+                <div className=''>
+                    <PropertyList />
+                </div>
             </div>
 
         </>
