@@ -5,6 +5,7 @@ import UserContext from "../User/UserContext";
 
 const PropertyProvider = (props) => {
     const [properties, setProperties] = useState([])
+    const [singleProperty, setSingleProperty] = useState('')
     const context = useContext(UserContext)
     const { user } = context
 
@@ -24,12 +25,21 @@ const PropertyProvider = (props) => {
 
     })
 
+    const getProperty = useCallback(async(id)=>{
+        const response = axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/property/${id}`,{withCredentials:true})
+        .then((data)=>{
+            setSingleProperty(data.data.property)
+        }).catch((error)=>{
+            console.log(error);
+        })
+    })
+
     useEffect(() => {
         listProperties();
     }, [user])
 
     return (
-        <PropertyContext.Provider value={{ properties }}>
+        <PropertyContext.Provider value={{ properties, getProperty, singleProperty }}>
             {props.children}
         </PropertyContext.Provider>
     )

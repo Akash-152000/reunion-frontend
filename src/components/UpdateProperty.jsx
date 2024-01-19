@@ -1,41 +1,248 @@
-import React, { useState } from 'react'
-import UpdateProperty from './UpdateProperty';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import PropertyContext from '../context/Property/PropertyContext'
 
-function MyPropertyList({id, propertyName, propertyDescription, propertyAddress, availableFrom, price, propertyType, rooms, toilets, area, images, category, amenities }) {
+const UpdateProperty = () => {
+    const { id } = useParams()
+    const context = useContext(PropertyContext)
+    const { getProperty, singleProperty } = context
+    const { propertyName, propertyDescription, propertyAddress, availableFrom, price, propertyType, rooms, toilets, area, images, category, amenities } = singleProperty
 
-    // const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(true)
-    
+    const [editPropertyName, setEditPropertyName] = useState(false)
+    const [editPropertyDescription, setEditPropertyDescription] = useState(false)
+    const [editPropertyAddress, setEditPropertyAddress] = useState(false)
+    const [editCity, setEditCity] = useState(false)
+    const [editState, setEditState] = useState(false)
+    const [editAvailableFrom, setEditAvailableFrom] = useState(false)
+    const [editPrice, setEditPrice] = useState(false)
+    const [editPropertyType, setEditPropertyType] = useState(false)
+    const [editRooms, setEditRooms] = useState(false)
+    const [editToilets, setEditToilets] = useState(false)
+    const [editArea, setEditArea] = useState(false)
+    const [editCategory, setEditCategory] = useState(false)
+    const [editNearbyHospital, setEditNearbyHospital] = useState(false)
+    const [editNearbySchool, setEditNearbySchool] = useState(false)
+    const [editNearbyBusStation, setEditNearbyBusStation] = useState(false)
+    const [editNearbyRailwayStation, setEditNearbyRailwayStation] = useState(false)
+
+    const [credentials, setCredentials] = useState(
+        {
+            propertyName: '',
+            propertyDescription: '',
+            propertyAddress: {
+                address: '',
+                city: '',
+                state: ''
+            },
+            availableFrom: '',
+            price: '',
+            propertyType: '',
+            rooms: '',
+            toilets: '',
+            area: '',
+            images: '',
+            category: '',
+            amenities: {
+                nearbyHospital: '',
+                nearbySchool: '',
+                nearbyBusStation: '',
+                nearbyRailwayStation: ''
+            }
+        })
+
+
+    const onChange = (e) => {
+        setCredentials({ ...credentials, [e.target.name]: e.target.value })
+    }
+
+    const handleEdit = (data) => {
+        if (data === 'propertyName') {
+            setEditPropertyName(!editPropertyName)
+            setCredentials({ ...credentials, propertyName: '' });
+        }
+        if (data === 'propertyDescription') {
+            setEditPropertyDescription(!editPropertyDescription)
+            setCredentials({ ...credentials, propertyDescription: "" })
+        }
+        if (data === 'address') {
+            setEditPropertyAddress(!editPropertyAddress)
+            setCredentials({ ...credentials, address: '' });
+        }
+        if (data === 'city') {
+            setEditCity(!editCity)
+            setCredentials({ ...credentials, city: '' });
+        }
+        if (data === 'state') {
+            setEditState(!editState)
+            setCredentials({ ...credentials, state: '' });
+        }
+        if (data === 'availableFrom') {
+            setEditAvailableFrom(!editAvailableFrom)
+            setCredentials({ ...credentials, availableFrom: '' });
+        }
+        if (data === 'price') {
+            setEditPrice(!editPrice)
+            setCredentials({ ...credentials, price: "" })
+        }
+        if (data === 'propertyType') {
+            setEditPropertyType(!editPropertyType)
+            setCredentials({ ...credentials, propertyType: '' });
+        }
+        if (data === 'rooms') {
+            setEditRooms(!editRooms)
+            setCredentials({ ...credentials, rooms: '' });
+        }
+        if (data === 'toilets') {
+            setEditToilets(!editToilets)
+            setCredentials({ ...credentials, toilets: '' });
+        }
+        if (data === 'area') {
+            setEditArea(!editArea)
+            setCredentials({ ...credentials, area: '' });
+        }
+        if (data === 'category') {
+            setEditCategory(!editCategory)
+            setCredentials({ ...credentials, category: "" })
+        }
+        if (data === 'nearbyHospital') {
+            setEditNearbyHospital(!editNearbyBusStation)
+            setCredentials({ ...credentials, nearbyHospital: '' });
+        }
+        if (data === 'nearbySchool') {
+            setEditNearbySchool(!editNearbySchool)
+            setCredentials({ ...credentials, nearbySchool: '' });
+        }
+        if (data === 'nearbyBusStation') {
+            setEditNearbyBusStation(!editNearbyBusStation)
+            setCredentials({ ...credentials, nearbyBusStation: '' });
+        }
+        if (data === 'nearbyRailwayStation') {
+            setEditNearbyRailwayStation(!editNearbyRailwayStation)
+            setCredentials({ ...credentials, nearbyRailwayStation: '' });
+        }
 
 
 
 
-    // const openModal = () => {
-    //     setIsModalOpen(true);
-    // };
 
-    // const closeModal = () => {
-    //     setIsModalOpen(false);
-    // };
-    // const handleSubmit = () => {
+    }
 
-    // }
+    const handleSubmit = () => {
+
+    }
+
+
+    useEffect(() => {
+        getProperty(id)
+
+    }, [])
+
+
+    if (!singleProperty) {
+        return (
+            <div>Loading...</div>
+        )
+    }
 
     return (
-        <div className='flex justify-between items-center w-auto border mx-2 my-4 px-2 py-4'>
-            <div>{propertyName}</div>
-            <div>{propertyType}</div>
-            <div>{category}</div>
-            <div>{price}</div>
-            <button className=' px-[20px] py-2 rounded-lg text-white bg-[#33691e] hover:bg-[#1c344a]'>View</button>
-            <Link to={`/property/${id}`}>
-                <button onClick={openModal} className=' px-[20px] py-2 rounded-lg text-white bg-[#0073e1] hover:bg-[#1c344a]'>Update</button>
-            </Link>
-            <button className=' px-[20px] py-2 rounded-lg text-white bg-red-500 hover:bg-[#1c344a]'>Delete</button>
+        <div>
+            <div className='flex justify-center font-semibold text-[34px] m-4'>
+                {propertyName}
+            </div>
 
-            {/* <UpdateProperty isOpen={isModalOpen} onClose={closeModal}>
-                <div className='w-[80vw]'>
+            <div className='mx-6'>
+                <form onSubmit={handleSubmit} >
+                    <div className='flex'>
+                        <div className='w-[20vw]'>
+                            <div className='font-medium text-[#8d8c8c]'>
+                                Property address:
+                            </div>
+                            <div>
+                                {editPropertyName
+                                    ?
+                                    <div>
+                                        <input
+                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                            type="text"
+                                            name='propertyName'
+                                            placeholder={propertyName}
+                                            value={credentials.propertyName}
+                                            onChange={onChange}
+                                            required
+                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyName')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                    </div>
+                                    :
+                                    <div>
+                                        {propertyName} <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyName(!editPropertyName)}><i className="fa-solid fa-pencil"></i> </span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div className='w-[40vw]'>
+                            <div className='font-medium text-[#8d8c8c]'>
+                                Property address:
+                            </div>
+                            <div>
+                                {editPropertyDescription
+                                    ?
+                                    <div>
+                                        <textarea
+                                            className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[500px]"
+                                            type="text"
+                                            name='propertyDescription'
+                                            placeholder={propertyDescription}
+                                            value={credentials.propertyDescription}
+                                            onChange={onChange}
+                                            rows={5}
+                                            required
+                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyDescription')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                    </div>
+                                    :
+                                    <div>
+                                        {propertyDescription}<span className='pl-2 cursor-pointer' onClick={() => setEditPropertyDescription(!editPropertyDescription)}><i className="fa-solid fa-pencil"></i> </span>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <div className='w-[20vw]'>
+                            <div className='font-medium text-[#8d8c8c]'>
+                                Rent/Price:
+                            </div>
+                            <div>
+                                {editPrice
+                                    ?
+                                    <div><b>Price: </b>
+                                        <input
+                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                            type="text"
+                                            name='price'
+                                            placeholder={price}
+                                            value={credentials.price}
+                                            onChange={onChange}
+                                            required
+                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('price')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                    </div>
+                                    :
+                                    <div>
+                                        <i className="fa-solid fa-indian-rupee-sign"></i> {price}<span className='pl-2 cursor-pointer' onClick={() => setEditPrice(!editPrice)}><i className="fa-solid fa-pencil"></i> </span>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <div>
+                            
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            {/* <div className='w-[80vw]'>
+                    
                     <div>
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU" alt="" />
                     </div>
@@ -376,14 +583,10 @@ function MyPropertyList({id, propertyName, propertyDescription, propertyAddress,
                         }
                     </form>
 
-                </div>
+                </div> */}
 
-
-                <button onClick={closeModal} className=' px-[20px] py-2 rounded-lg text-white bg-[#33691e] hover:bg-[#1c344a]'>View</button>
-            </UpdateProperty> */}
         </div>
-
     )
 }
 
-export default MyPropertyList
+export default UpdateProperty

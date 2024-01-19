@@ -7,6 +7,7 @@ import Signup from './components/Signup.jsx'
 import Login from './components/Login.jsx'
 import Home from './components/Home.jsx'
 import MyProfile from './components/MyProfile.jsx'
+import UpdateProperty from './components/UpdateProperty.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -15,6 +16,7 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path = "/myprofile" element={<MyProfile />} />
+      <Route path = "/property/:id" element={<UpdateProperty />} />
     </Route>
   )
 )
