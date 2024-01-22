@@ -15,31 +15,65 @@ const PropertyProvider = (props) => {
                 const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/property`, { withCredentials: true }).then((response) => {
                     setProperties(response.data.property)
                 }).catch((error) => console.log(error))
-            } else {
-                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/list-properties`, { withCredentials: true }).then((response) => {
-                    setProperties(response.data.properties)
-                }).catch((error) => console.log(error))
             }
         }
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/list-properties`, { withCredentials: true }).then((response) => {
+            setProperties(response.data.properties)
+        }).catch((error) => console.log(error))
+
+
 
 
     })
 
-    const getProperty = useCallback(async(id)=>{
-        const response = axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/property/${id}`,{withCredentials:true})
-        .then((data)=>{
-            setSingleProperty(data.data.property)
-        }).catch((error)=>{
-            console.log(error);
-        })
+    const getProperty = useCallback(async (id) => {
+        const response = axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/property/${id}`, { withCredentials: true })
+            .then((data) => {
+                setSingleProperty(data.data.property)
+            }).catch((error) => {
+                console.log(error);
+            })
+    })
+
+    const updateProperty = useCallback(async (id, credentials) => {
+        const { propertyName, propertyDescription, availableFrom, propertyType, rooms, toilets, area, category, price, address, city, state, nearbyHospital, nearbySchool, nearbyBusStation, nearByRailwayStation } = credentials
+
+        let payload = {}
+
+        if (propertyName) payload.propertyName = propertyName
+        if (propertyDescription) payload.propertyDescription = propertyDescription
+        if (availableFrom) payload.availableFrom = availableFrom
+        if (propertyType) payload.propertyType = propertyType
+        if (rooms) payload.rooms = rooms
+        if (toilets) payload.toilets = toilets
+        if (area) payload.area = area
+        if (category) payload.category = category
+        if (price) payload.price = price
+
+        if (address) payload.address = address
+        if (city) payload.city = city
+        if (state) payload.state = state
+
+        if (nearbyHospital) payload.nearbyHospital = nearbyHospital
+        if (nearbySchool) payload.nearbySchool = nearbySchool
+        if (nearbyBusStation) payload.nearbyBusStation = nearbyBusStation
+        if (nearByRailwayStation) payload.nearByRailwayStation = nearByRailwayStation
+
+        const response = axios.put(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/property/${id}`, payload, { withCredentials: true })
+            .then((data) => {
+                setSingleProperty(data.data.property)
+            })
+            .catch((error) => [
+                console.log(error)
+            ])
     })
 
     useEffect(() => {
         listProperties();
-    }, [user])
+    }, [user, singleProperty])
 
     return (
-        <PropertyContext.Provider value={{ properties, getProperty, singleProperty }}>
+        <PropertyContext.Provider value={{ properties, getProperty, singleProperty, updateProperty }}>
             {props.children}
         </PropertyContext.Provider>
     )

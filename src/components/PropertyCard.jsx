@@ -1,10 +1,13 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
-const PropertyCard = ({ price, propertyName, propertyAddress, city, state, propertyType, toilets, rooms }) => {
+
+const PropertyCard = ({id, price, propertyName,address, city, state, propertyType, toilets, rooms }) => {
     return (
         <>
 
             <div className='w-[200px] '>
+                {console.log( price, propertyName,address, city, state, propertyType, toilets, rooms )}
                 <div>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU" alt="" />
                 </div>
@@ -17,7 +20,7 @@ const PropertyCard = ({ price, propertyName, propertyAddress, city, state, prope
                         <div className='font-semibold text-[16px]'>{propertyName}</div>
                     </div>
                     <div>
-                        <div className='font-medium text-[#575656] text-[14px]'>{propertyAddress}</div>
+                        <div className='font-medium text-[#575656] text-[14px]'>{address}</div>
                         <div className='font-medium text-[#575656] text-[14px]'>{city}</div>
                         <div className='font-medium text-[#575656] text-[14px]'>{state}</div>
                     </div>
@@ -27,7 +30,9 @@ const PropertyCard = ({ price, propertyName, propertyAddress, city, state, prope
                         <div>{propertyType} <i className="fa-solid fa-house" style={{ color: "#33691e" }}></i></div>
                     </div>
                     <div className='w-full flex justify-center'>
-                        <button className='mt-2 px-[40px] py-2 rounded-lg text-white bg-[#33691e] hover:bg-[#1c344a]'>View</button>
+                        <Link to={`/property/${id}`}>
+                            <button className='mt-2 px-[40px] py-2 rounded-lg text-white bg-[#33691e] hover:bg-[#1c344a]'>View</button>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -1,12 +1,22 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import PropertyContext from '../context/Property/PropertyContext'
+import { Link } from 'react-router-dom';
 
-const UpdateProperty = () => {
+const UpdateProperty = ({ utilityFlag }) => {
     const { id } = useParams()
+    const { search } = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const toUpdate = queryParams.get('update') === 'true';
+
+
     const context = useContext(PropertyContext)
-    const { getProperty, singleProperty } = context
-    const { propertyName, propertyDescription, propertyAddress, availableFrom, price, propertyType, rooms, toilets, area, images, category, amenities } = singleProperty
+    const { getProperty, singleProperty, updateProperty } = context
+    const { propertyName, propertyDescription, address, city, state, availableFrom, price, propertyType, rooms, toilets, area, images, category, nearbyHospital, nearbyBusStation, nearbySchool, nearbyRailwayStation } = singleProperty
+
+
+
+
 
     const [loading, setLoading] = useState(true)
     const [editPropertyName, setEditPropertyName] = useState(false)
@@ -30,11 +40,6 @@ const UpdateProperty = () => {
         {
             propertyName: '',
             propertyDescription: '',
-            propertyAddress: {
-                address: '',
-                city: '',
-                state: ''
-            },
             availableFrom: '',
             price: '',
             propertyType: '',
@@ -43,18 +48,22 @@ const UpdateProperty = () => {
             area: '',
             images: '',
             category: '',
-            amenities: {
-                nearbyHospital: '',
-                nearbySchool: '',
-                nearbyBusStation: '',
-                nearbyRailwayStation: ''
-            }
-        })
+            address: '',
+            city: '',
+            state: '',
+            nearbyHospital: '',
+            nearbySchool: '',
+            nearbyBusStation: '',
+            nearbyHospital: ''
 
+
+        })
 
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
-    }
+
+    };
+
 
     const handleEdit = (data) => {
         if (data === 'propertyName') {
@@ -67,15 +76,15 @@ const UpdateProperty = () => {
         }
         if (data === 'address') {
             setEditPropertyAddress(!editPropertyAddress)
-            setCredentials({ ...credentials, address: '' });
+            setCredentials({ ...credentials, address: "" })
         }
         if (data === 'city') {
             setEditCity(!editCity)
-            setCredentials({ ...credentials, city: '' });
+            setCredentials({ ...credentials, city: "" })
         }
         if (data === 'state') {
             setEditState(!editState)
-            setCredentials({ ...credentials, state: '' });
+            setCredentials({ ...credentials, state: "" })
         }
         if (data === 'availableFrom') {
             setEditAvailableFrom(!editAvailableFrom)
@@ -106,20 +115,20 @@ const UpdateProperty = () => {
             setCredentials({ ...credentials, category: "" })
         }
         if (data === 'nearbyHospital') {
-            setEditNearbyHospital(!editNearbyBusStation)
-            setCredentials({ ...credentials, nearbyHospital: '' });
+            setEditNearbyHospital(!editNearbyHospital)
+            setCredentials({ ...credentials, nearbyHospital: "" })
         }
         if (data === 'nearbySchool') {
             setEditNearbySchool(!editNearbySchool)
-            setCredentials({ ...credentials, nearbySchool: '' });
+            setCredentials({ ...credentials, nearbySchool: "" })
         }
         if (data === 'nearbyBusStation') {
             setEditNearbyBusStation(!editNearbyBusStation)
-            setCredentials({ ...credentials, nearbyBusStation: '' });
+            setCredentials({ ...credentials, nearbyBusStation: "" })
         }
         if (data === 'nearbyRailwayStation') {
             setEditNearbyRailwayStation(!editNearbyRailwayStation)
-            setCredentials({ ...credentials, nearbyRailwayStation: '' });
+            setCredentials({ ...credentials, nearbyRailwayStation: "" })
         }
 
 
@@ -128,7 +137,10 @@ const UpdateProperty = () => {
 
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        updateProperty(id, credentials)
+        window.location.reload();
 
     }
 
@@ -147,445 +159,679 @@ const UpdateProperty = () => {
 
     return (
         <div>
-            <div className='flex justify-center font-semibold text-[34px] m-4'>
-                {propertyName}
-            </div>
+            <Link to="/myprofile">
+                <div className='absolute ml-[4%] mt-[5px] cursor-pointer '>
+                    <div className='p-2 rounded-full bg-[#0073e1] text-white'>
+                        <i className="fa-solid fa-arrow-left-long fa-xl"></i>
+                    </div>
+                </div>
+            </Link>
+            <div className='flex justify-center bg-[#dadada]'>
 
-            <div className='mx-6'>
-                <form onSubmit={handleSubmit} >
-                    <div className='flex'>
-                        <div className='w-[20vw]'>
-                            <div className='font-medium text-[#8d8c8c]'>
-                                Property address:
-                            </div>
-                            <div>
-                                {editPropertyName
-                                    ?
-                                    <div>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='propertyName'
-                                            placeholder={propertyName}
-                                            value={credentials.propertyName}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyName')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        {propertyName} <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyName(!editPropertyName)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                        <div className='w-[40vw]'>
-                            <div className='font-medium text-[#8d8c8c]'>
-                                Property address:
-                            </div>
-                            <div>
-                                {editPropertyDescription
-                                    ?
-                                    <div>
-                                        <textarea
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[500px]"
-                                            type="text"
-                                            name='propertyDescription'
-                                            placeholder={propertyDescription}
-                                            value={credentials.propertyDescription}
-                                            onChange={onChange}
-                                            rows={5}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyDescription')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        {propertyDescription}<span className='pl-2 cursor-pointer' onClick={() => setEditPropertyDescription(!editPropertyDescription)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-                        <div className='w-[20vw]'>
-                            <div className='font-medium text-[#8d8c8c]'>
-                                Rent/Price:
-                            </div>
-                            <div>
-                                {editPrice
-                                    ?
-                                    <div><b>Price: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='price'
-                                            placeholder={price}
-                                            value={credentials.price}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('price')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <i className="fa-solid fa-indian-rupee-sign"></i> {price}<span className='pl-2 cursor-pointer' onClick={() => setEditPrice(!editPrice)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-                        <div>
-                            
-                        </div>
+                <div className='mb-[100px]'>
+                    <div className='flex justify-center font-semibold text-[34px] m-4 mb-[40px]'>
+                        {propertyName}
                     </div>
 
-
-                </form>
-            </div>
-            {/* <div className='w-[80vw]'>
-                    
-                    <div>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU" alt="" />
-                    </div>
-                    <form onSubmit={handleSubmit} className='grid grid-cols-1 gap-2 w-full items-center'>
-                        <div className='w-full mt-[40px]'>
-                            <div className='flex justify-start'>
-                                {editPropertyName
-                                    ?
-                                    <div><b>Property Name: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='propertyName'
-                                            placeholder={propertyName}
-                                            value={credentials.propertyName}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyName')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Property Name:</b> {propertyName} <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyName(!editPropertyName)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editPropertyDescription
-                                    ?
-                                    <div><b>Property Description: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='propertyDescription'
-                                            placeholder={propertyDescription}
-                                            value={credentials.propertyDescription}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyDescription')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Property Description:</b> {propertyDescription}<span className='pl-2 cursor-pointer' onClick={() => setEditPropertyDescription(!editPropertyDescription)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-
-
-                        <div className='w-full mt-[40px]'>
-                            <div className='flex justify-around'>
-                                {editPropertyAddress
-                                    ?
-                                    <div><b>Address: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='address'
-                                            placeholder={propertyAddress.address}
-                                            value={credentials.propertyAddress.address}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('address')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Address:</b> {propertyAddress.address} <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyAddress(!editPropertyAddress)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editCity
-                                    ?
-                                    <div><b>City: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='city'
-                                            placeholder={propertyAddress.city}
-                                            value={credentials.propertyAddress.city}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('city')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>City:</b> {propertyAddress.city}<span className='pl-2 cursor-pointer' onClick={() => setEditCity(!editCity)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editState
-                                    ?
-                                    <div><b>State: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='state'
-                                            placeholder={propertyAddress.state}
-                                            value={credentials.propertyAddress.state}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('state')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>State:</b> {propertyAddress.state}<span className='pl-2 cursor-pointer' onClick={() => setEditState(!editState)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-
-
-
-                        <div className='w-full mt-[40px]'>
-                            <div className='flex justify-around'>
-                                {editPrice
-                                    ?
-                                    <div><b>Price: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='price'
-                                            placeholder={price}
-                                            value={credentials.price}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('price')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Price:</b> {price}<span className='pl-2 cursor-pointer' onClick={() => setEditPrice(!editPrice)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editCategory
-                                    ?
-                                    <div><b>Category: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='category'
-                                            placeholder={category}
-                                            value={credentials.category}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('category')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Category:</b> {category}<span className='pl-2 cursor-pointer' onClick={() => setEditCategory(!editCategory)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                        <div className='w-full mt-[40px]'>
-                            <div className='flex justify-around'>
-                                {editAvailableFrom
-                                    ?
-                                    <div><b>Available From: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='availableFrom'
-                                            placeholder={availableFrom}
-                                            value={credentials.availableFrom}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('availableFrom')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Available From:</b> {availableFrom}<span className='pl-2 cursor-pointer' onClick={() => setEditAvailableFrom(!editAvailableFrom)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editPropertyType
-                                    ?
-                                    <div><b>Property Type: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='propertyType'
-                                            placeholder={propertyType}
-                                            value={credentials.propertyType}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyType')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Property Type:</b> {propertyType}<span className='pl-2 cursor-pointer' onClick={() => setEditPropertyType(!editPropertyType)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-
-
-                        <div className='w-full mt-[40px]'>
-                            <div className='flex justify-around'>
-                                {editRooms
-                                    ?
-                                    <div><b>Rooms: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='rooms'
-                                            placeholder={rooms}
-                                            value={credentials.rooms}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('rooms')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Rooms:</b> {rooms} <span className='pl-2 cursor-pointer' onClick={() => setEditRooms(!editsetEditRooms)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editToilets
-                                    ?
-                                    <div><b>Toilets: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='toilets'
-                                            placeholder={toilets}
-                                            value={credentials.toilets}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('toilets')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Toilets:</b> {toilets}<span className='pl-2 cursor-pointer' onClick={() => setEditToilets(!editToilets)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editArea
-                                    ?
-                                    <div><b>Are: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='area'
-                                            placeholder={area}
-                                            value={credentials.area}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('area')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Area:</b> {area} sq.ft.<span className='pl-2 cursor-pointer' onClick={() => setEditArea(!editArea)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-
-
-
-                        <div className='w-full mt-[40px]'>
-                            <div className='flex justify-around'>
-                                {editNearbyHospital
-                                    ?
-                                    <div><b>Nearby Hospital: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='nearbyHospital'
-                                            placeholder={amenities.nearbyHospital}
-                                            value={credentials.amenities.nearbyHospital}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyHospital')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Nearby Hospital:</b> {amenities.nearbyHospital} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbyHospital(!editNearbyHospital)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editNearbySchool
-                                    ?
-                                    <div><b>Nearby School: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='nearbySchool'
-                                            placeholder={amenities.nearbySchool}
-                                            value={credentials.amenities.nearbySchool}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbySchool')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Nearby School:</b> {amenities.nearbySchool} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbySchool(!editNearbySchool)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editNearbyBusStation
-                                    ?
-                                    <div><b>Nearby BusStation: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='nearbyBusStation'
-                                            placeholder={amenities.nearbyBusStation}
-                                            value={credentials.amenities.nearbyBusStation}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyBusStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Nearby BusStation:</b> {amenities.nearbyBusStation} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbyBusStation(!editNearbyBusStation)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-                                {editNearbyRailwayStation
-                                    ?
-                                    <div><b>Nearby RailwayStation: </b>
-                                        <input
-                                            className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                            type="text"
-                                            name='nearbyRailwayStation'
-                                            placeholder={amenities.nearbyRailwayStation}
-                                            value={credentials.amenities.nearbyRailwayStation}
-                                            onChange={onChange}
-                                            required
-                                        /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyRailwayStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
-                                    </div>
-                                    :
-                                    <div>
-                                        <b>Nearby RailwayStation:</b> {amenities.nearbyRailwayStation} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbyRailwayStation(!editNearbyRailwayStation)}><i className="fa-solid fa-pencil"></i> </span>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
-
-
+                    <div className=' flex justify-center items-center w-[80vw] h-[30vh] border-dotted border-2 rounded-xl border-[#4f4f4f] mx-6'>
                         {
-                            credentials.name === "" && credentials.phone === "" && credentials.email === "" && credentials.address === "" ? <></>
-                                : <button type='submit' className='mt-10 px-[40px] py-2 rounded-lg text-white bg-[#0073e1] hover:bg-[#1c344a]'>Update</button>
-                        }
-                    </form>
+                            toUpdate ?
+                                <div className=''>
+                                    <div className='flex justify-center'><i className="fa-regular fa-image fa-2xl" style={{ color: '#8d8c8c', fontSize: '50px' }}></i></div>
 
-                </div> */}
+                                    <div className='flex justify-center mt-[30px] font-medium text-[#8d8c8c]'>Upload an Image</div>
+                                    <div className='flex justify-center mt-[10px]'>
+                                        <input
+                                            className=''
+                                            type="file"
+                                            accept="image/*"
+                                            style={{ minWidth: '300px' }}
+                                            // onChange={handleImageChange}
+                                            multiple
+                                        />
+                                    </div>
+
+                                </div>
+                                : <div>
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU" alt="" />
+                                </div>
+                        }
+
+
+                    </div>
+
+                    <div className='mx-6'>
+                        <form onSubmit={handleSubmit} >
+                            <div className='flex mt-[40px]'>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Property Name:
+                                    </div>
+                                    <div>
+                                        {editPropertyName
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[200px]"
+                                                    type="text"
+                                                    name='propertyName'
+                                                    placeholder={propertyName}
+                                                    value={credentials.propertyName}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyName')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            {propertyName}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyName(!editPropertyName)}>
+                                                                <i className="fa-solid fa-pencil"></i>
+                                                            </span>
+                                                        </div>
+                                                        : <div>{propertyName}</div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Rent/Price:
+                                    </div>
+                                    <div>
+                                        {editPrice
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='price'
+                                                    placeholder={price}
+                                                    value={credentials.price}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('price')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-indian-rupee-sign mr-4" style={{ color: "#33691e" }}></i>
+                                                            {price}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditPrice(!editPrice)}>
+                                                                <i className="fa-solid fa-pencil"></i>
+                                                            </span>
+                                                        </div>
+                                                        : <div>{price}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Category:
+                                    </div>
+                                    <div>
+                                        {editCategory
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='category'
+                                                    placeholder={category}
+                                                    value={credentials.category}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('category')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            {category}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditCategory(!editCategory)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{category}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Property Type:
+                                    </div>
+                                    <div>
+                                        {editPropertyType
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='propertyType'
+                                                    placeholder={propertyType}
+                                                    value={credentials.propertyType}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyType')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-building mr-4" style={{ color: "#33691e" }}></i>  {propertyType}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyType(!editPropertyType)}>
+                                                                <i className="fa-solid fa-pencil"></i>
+                                                            </span>
+                                                        </div>
+                                                        : <div>{propertyType}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+                            </div>
+
+                            <div className='mt-[60px]'>
+                                <div className='w-[40vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Property Description:
+                                    </div>
+                                    <div>
+                                        {editPropertyDescription
+                                            ?
+                                            <div>
+                                                <textarea
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[500px]"
+                                                    type="text"
+                                                    name='propertyDescription'
+                                                    placeholder={propertyDescription}
+                                                    value={credentials.propertyDescription}
+                                                    onChange={onChange}
+                                                    rows={5}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyDescription')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            {propertyDescription}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyDescription(!editPropertyDescription)}>
+                                                                <i className="fa-solid fa-pencil"></i>
+                                                            </span>
+                                                        </div>
+                                                        : <div>{propertyDescription}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='mt-[60px] flex'>
+                                <div className='w-[30vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Property address:
+                                    </div>
+                                    <div>
+                                        {editPropertyAddress
+                                            ?
+                                            <div>
+
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='address'
+                                                    placeholder={address}
+                                                    value={credentials.address}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('address')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-address-book mr-4" style={{ color: "#33691e" }}></i>  {address}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditPropertyAddress(!editPropertyAddress)}>
+                                                                <i className="fa-solid fa-pencil"></i>
+                                                            </span>
+                                                        </div>
+                                                        : <div>{console.log(address)}{address}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        City:
+                                    </div>
+                                    <div>
+                                        {editCity
+                                            ?
+                                            <div>
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='city'
+                                                    placeholder={city}
+                                                    value={credentials.city}
+                                                    onChange={onChange}
+                                                    required>
+                                                    <option value="none" hidden>Select location</option>
+                                                    <option value="mumbai">Mumbai</option>
+                                                    <option value="delhi">Delhi</option>
+                                                    <option value="Jaipur">Jaipur</option>
+                                                    <option value="kolkata">Kolkata</option>
+                                                </select>
+                                                {/* <input
+
+                                                /> */}
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('city')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            {city}<span className='pl-2 cursor-pointer' onClick={() => setEditCity(!editCity)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{city}</div>
+                                                }
+
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        State:
+                                    </div>
+                                    <div>
+                                        {editState
+                                            ?
+                                            <div>
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='state'
+                                                    placeholder={state}
+                                                    value={credentials.state}
+                                                    onChange={onChange}
+                                                    required>
+                                                    <option value="none" disabled hidden>Select location</option>
+                                                    <option value="mumbai">Maharashtra</option>
+                                                    <option value="delhi">Delhi</option>
+                                                    <option value="Jaipur">Rajasthan</option>
+                                                    <option value="kolkata">Bengal</option>
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('state')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            {state}<span className='pl-2 cursor-pointer' onClick={() => setEditState(!editState)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{state}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='mt-[60px] flex'>
+                                <div className='w-[12vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Rooms:
+                                    </div>
+                                    <div>
+                                        {editRooms
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[100px]"
+                                                    type="text"
+                                                    name='rooms'
+                                                    placeholder={rooms}
+                                                    value={credentials.rooms}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('rooms')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-bed mr-4" style={{ color: "#33691e" }}></i>
+                                                            {rooms}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditRooms(!editRooms)}>
+                                                                <i className="fa-solid fa-pencil"></i>
+                                                            </span>
+                                                        </div>
+                                                        : <div>{rooms}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className='w-[12vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Toilets:
+                                    </div>
+                                    <div>
+                                        {editToilets
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[100px]"
+                                                    type="text"
+                                                    name='toilets'
+                                                    placeholder={toilets}
+                                                    value={credentials.toilets}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('toilets')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-toilet mr-4" style={{ color: "#33691e" }}></i>
+                                                            {toilets}
+                                                            <span className='pl-2 cursor-pointer' onClick={() => setEditToilets(!editToilets)}>
+                                                                <i className="fa-solid fa-pencil"></i>
+                                                            </span>
+                                                        </div>
+                                                        : <div>{toilets}</div>
+                                                }
+
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className='w-[12vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Area:
+                                    </div>
+                                    <div>
+                                        {editArea
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[100px]"
+                                                    type="text"
+                                                    name='area'
+                                                    placeholder={area}
+                                                    value={credentials.area}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('area')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-house mr-4" style={{ color: "#33691e" }}></i>{area} sq.ft.<span className='pl-2 cursor-pointer' onClick={() => setEditArea(!editArea)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{area} sq.ft. </div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Available From:
+                                    </div>
+                                    <div>
+                                        {editAvailableFrom
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='availableFrom'
+                                                    placeholder={new Date(availableFrom).toLocaleDateString('en-GB', {
+                                                        day: 'numeric',
+                                                        month: 'long',
+                                                        year: 'numeric'
+                                                    })}
+                                                    value={credentials.availableFrom}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('availableFrom')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-regular fa-calendar-days mr-4" style={{ color: "#33691e" }}></i> {new Date(availableFrom).toLocaleDateString('en-GB', {
+                                                                day: 'numeric',
+                                                                month: 'long',
+                                                                year: 'numeric'
+                                                            })}<span className='pl-2 cursor-pointer' onClick={() => setEditAvailableFrom(!editAvailableFrom)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{new Date(availableFrom).toLocaleDateString('en-GB', {
+                                                            day: 'numeric',
+                                                            month: 'long',
+                                                            year: 'numeric'
+                                                        })}</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='mt-[60px] flex'>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Nearby Hospital:
+                                    </div>
+                                    <div>
+                                        {editNearbyHospital
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='nearbyHospital'
+                                                    placeholder={nearbyHospital}
+                                                    value={credentials.nearbyHospital}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyHospital')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-hospital mr-4" style={{ color: "#33691e" }}></i> {nearbyHospital} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbyHospital(!editNearbyHospital)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{nearbyHospital} Km</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Nearby School:
+                                    </div>
+                                    <div>
+                                        {editNearbySchool
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='nearbySchool'
+                                                    placeholder={nearbySchool}
+                                                    value={credentials.nearbySchool}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbySchool')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-school mr-4" style={{ color: "#33691e" }}></i>{nearbySchool} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbySchool(!editNearbySchool)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{nearbySchool} Km</div>
+                                                }
+
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Nearby Bus Station:
+                                    </div>
+                                    <div>
+                                        {editNearbyBusStation
+                                            ?
+                                            <div>
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='nearbyBusStation'
+                                                    placeholder={nearbyBusStation}
+                                                    value={credentials.nearbyBusStation}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyBusStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-bus mr-4" style={{ color: "#33691e" }}></i>{nearbyBusStation} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbyBusStation(!editNearbyBusStation)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{nearbyBusStation} Km</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='mt-[60px] flex'>
+                                <div className='w-[20vw] border-[#6b6b6b] mr-3 border-2 p-4 rounded-xl'>
+                                    <div className='font-medium text-[#8d8c8c]'>
+                                        Nearby Railway Station:
+                                    </div>
+                                    <div>
+                                        {editNearbyRailwayStation
+                                            ?
+                                            <div>
+
+                                                <input
+                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                    type="text"
+                                                    name='nearbyRailwayStation'
+                                                    placeholder={nearbyRailwayStation}
+                                                    value={credentials.nearbyRailwayStation}
+                                                    onChange={onChange}
+                                                    required
+                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyRailwayStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    toUpdate
+                                                        ?
+                                                        <div>
+                                                            <i className="fa-solid fa-train mr-4" style={{ color: "#33691e" }}></i> {nearbyRailwayStation} Km<span className='pl-2 cursor-pointer' onClick={() => setEditNearbyRailwayStation(!editNearbyRailwayStation)}><i className="fa-solid fa-pencil"></i> </span>
+                                                        </div>
+                                                        : <div>{nearbyRailwayStation} Km</div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            {
+                                credentials.propertyName === "" && credentials.propertyDescription === "" && credentials.address === "" && credentials.city === "" && credentials.state === "" && credentials.availableFrom === "" && credentials.price === "" && credentials.propertyType === "" && credentials.rooms === "" && credentials.toilets === "" && credentials.area === "" && credentials.category === "" && credentials.nearbyHospital === "" && credentials.nearbySchool === "" && credentials.nearbyBusStation === "" && credentials.nearbyRailwayStation === "" ? <></>
+                                    : <button type='submit' className='mt-10 px-[40px] py-2 rounded-lg text-white bg-[#0073e1] hover:bg-[#1c344a]'>Update</button>
+                            }
+                        </form>
+                    </div>
+
+                </div>
+
+
+            </div>
 
         </div>
+
     )
 }
 

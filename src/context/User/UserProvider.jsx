@@ -98,7 +98,7 @@ const UserProvider = (props) => {
     if (phone) payload.phone = phone;
     if (email) payload.email = email;
     if (address) payload.address = address;
-
+    
     const response = await axios.post(`${backendUrl}/updateuser`, {
       payload
     }, { withCredentials: true }).then((data) => {
