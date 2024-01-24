@@ -11,6 +11,19 @@ const UserProvider = (props) => {
   const [user, setUser] = useState('')
   const navigate = useNavigate()
 
+  const [isAlertOpen, setIsAlertOpen] = useState(true)
+  const [alertMessage, setAlertMessage] = useState('')
+
+  const onClose = () => {
+    setIsAlertOpen(false)
+  }
+
+  const showAlert = (message) => {
+    setAlertMessage(message)
+    setIsAlertOpen(true)
+  }
+
+
   const signup = async ({ name, address, email, phone, password }, isOwner) => {
     try {
       let response;
@@ -98,7 +111,7 @@ const UserProvider = (props) => {
     if (phone) payload.phone = phone;
     if (email) payload.email = email;
     if (address) payload.address = address;
-    
+
     const response = await axios.post(`${backendUrl}/updateuser`, {
       payload
     }, { withCredentials: true }).then((data) => {
@@ -117,7 +130,7 @@ const UserProvider = (props) => {
   }, [isLoggedIn])
 
   return (
-    <UserContext.Provider value={{ signup, login, user, logout, isLoggedIn, updateUser }}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ signup, login, user, logout, isLoggedIn, updateUser, isAlertOpen, alertMessage, onClose, showAlert }}>{props.children}</UserContext.Provider>
   );
 };
 

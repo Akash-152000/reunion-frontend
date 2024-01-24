@@ -7,7 +7,6 @@ const PropertyCard = ({id, price, propertyName,address, city, state, propertyTyp
         <>
 
             <div className='w-[200px] '>
-                {console.log( price, propertyName,address, city, state, propertyType, toilets, rooms )}
                 <div>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYeNTWRIdYwzousHtWl43i39K6LB6IEks17A&usqp=CAU" alt="" />
                 </div>

@@ -8,6 +8,8 @@ import Login from './components/Login.jsx'
 import Home from './components/Home.jsx'
 import MyProfile from './components/MyProfile.jsx'
 import UpdateProperty from './components/UpdateProperty.jsx'
+import AddProperty from './components/AddProperty.jsx'
+import MyProperties from './components/MyProperties.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -16,12 +18,12 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path = "/myprofile" element={<MyProfile />} />
+      <Route path = "/myproperties" element={<MyProperties />} />
       <Route path = "/property/:id" element={<UpdateProperty />} />
+      <Route path = "/property/add" element={<AddProperty />} />
     </Route>
   )
 )
-
-
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

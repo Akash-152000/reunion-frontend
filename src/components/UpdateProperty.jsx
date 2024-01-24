@@ -1,20 +1,24 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import PropertyContext from '../context/Property/PropertyContext'
-import { Link } from 'react-router-dom';
+import UserContext from '../context/User/UserContext'
 
-const UpdateProperty = ({ utilityFlag }) => {
+
+const UpdateProperty = () => {
     const { id } = useParams()
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search);
     const toUpdate = queryParams.get('update') === 'true';
+
+    const navigate = useNavigate()
 
 
     const context = useContext(PropertyContext)
     const { getProperty, singleProperty, updateProperty } = context
     const { propertyName, propertyDescription, address, city, state, availableFrom, price, propertyType, rooms, toilets, area, images, category, nearbyHospital, nearbyBusStation, nearbySchool, nearbyRailwayStation } = singleProperty
 
-
+    const userContext = useContext(UserContext)
+    const {showAlert} = userContext
 
 
 
@@ -54,7 +58,7 @@ const UpdateProperty = ({ utilityFlag }) => {
             nearbyHospital: '',
             nearbySchool: '',
             nearbyBusStation: '',
-            nearbyHospital: ''
+            nearbyRailwayStation: ''
 
 
         })
@@ -140,8 +144,13 @@ const UpdateProperty = ({ utilityFlag }) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         updateProperty(id, credentials)
+        // showAlert("Property Details updated")
         window.location.reload();
 
+    }
+
+    const goBack=()=>{
+        history.goBack();
     }
 
 
@@ -159,13 +168,13 @@ const UpdateProperty = ({ utilityFlag }) => {
 
     return (
         <div>
-            <Link to="/myprofile">
-                <div className='absolute ml-[4%] mt-[5px] cursor-pointer '>
+            
+                <button onClick={()=>navigate(-1)} className='absolute ml-[4%] mt-[5px] cursor-pointer '>
                     <div className='p-2 rounded-full bg-[#0073e1] text-white'>
                         <i className="fa-solid fa-arrow-left-long fa-xl"></i>
                     </div>
-                </div>
-            </Link>
+                </button>
+            
             <div className='flex justify-center bg-[#dadada]'>
 
                 <div className='mb-[100px]'>
@@ -287,15 +296,19 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editCategory
                                             ?
                                             <div>
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
                                                     type="text"
                                                     name='category'
                                                     placeholder={category}
                                                     value={credentials.category}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('category')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="Rent">Rent</option>
+                                                    <option value="Buy">Buy</option>
+
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('category')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>
@@ -322,15 +335,20 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editPropertyType
                                             ?
                                             <div>
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
                                                     type="text"
                                                     name='propertyType'
                                                     placeholder={propertyType}
                                                     value={credentials.propertyType}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyType')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="1bhk">1bhk</option>
+                                                    <option value="2bhk">2bhk</option>
+                                                    <option value="3bhk">3bhk</option>
+                                                    <option value="4bhk">4bhk</option>
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('propertyType')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>
@@ -427,7 +445,7 @@ const UpdateProperty = ({ utilityFlag }) => {
                                                                 <i className="fa-solid fa-pencil"></i>
                                                             </span>
                                                         </div>
-                                                        : <div>{console.log(address)}{address}</div>
+                                                        : <div>{address}</div>
                                                 }
 
                                             </div>
@@ -528,15 +546,23 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editRooms
                                             ?
                                             <div>
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[100px]"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[100px]"
                                                     type="text"
                                                     name='rooms'
                                                     placeholder={rooms}
                                                     value={credentials.rooms}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('rooms')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('rooms')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>
@@ -566,15 +592,23 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editToilets
                                             ?
                                             <div>
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[100px]"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2 w-[100px]"
                                                     type="text"
                                                     name='toilets'
                                                     placeholder={toilets}
                                                     value={credentials.toilets}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('toilets')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('toilets')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>
@@ -639,7 +673,7 @@ const UpdateProperty = ({ utilityFlag }) => {
                                             <div>
                                                 <input
                                                     className="rounded-lg bg-[#ffffff] border px-3 py-2"
-                                                    type="text"
+                                                    type="date"
                                                     name='availableFrom'
                                                     placeholder={new Date(availableFrom).toLocaleDateString('en-GB', {
                                                         day: 'numeric',
@@ -686,15 +720,23 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editNearbyHospital
                                             ?
                                             <div>
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
                                                     type="text"
                                                     name='nearbyHospital'
                                                     placeholder={nearbyHospital}
                                                     value={credentials.nearbyHospital}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyHospital')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyHospital')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>
@@ -720,15 +762,23 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editNearbySchool
                                             ?
                                             <div>
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
                                                     type="text"
                                                     name='nearbySchool'
                                                     placeholder={nearbySchool}
                                                     value={credentials.nearbySchool}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbySchool')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbySchool')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>
@@ -753,15 +803,23 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editNearbyBusStation
                                             ?
                                             <div>
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
                                                     type="text"
                                                     name='nearbyBusStation'
                                                     placeholder={nearbyBusStation}
                                                     value={credentials.nearbyBusStation}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyBusStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                </select>
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyBusStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>
@@ -789,16 +847,24 @@ const UpdateProperty = ({ utilityFlag }) => {
                                         {editNearbyRailwayStation
                                             ?
                                             <div>
-
-                                                <input
-                                                    className="rounded-lg bg-[#ffffff] border px-3 py-2"
+                                                <select className="rounded-lg bg-[#ffffff] border px-3 py-2"
                                                     type="text"
                                                     name='nearbyRailwayStation'
                                                     placeholder={nearbyRailwayStation}
                                                     value={credentials.nearbyRailwayStation}
                                                     onChange={onChange}
                                                     required
-                                                /><span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyRailwayStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
+                                                >
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                </select>
+
+                                                <span className='cursor-pointer pl-2' onClick={() => handleEdit('nearbyRailwayStation')}><i className="fa-solid fa-circle-xmark fa-xl" style={{ color: 'red' }}></i></span>
                                             </div>
                                             :
                                             <div>

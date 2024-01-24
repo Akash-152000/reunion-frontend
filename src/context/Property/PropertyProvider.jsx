@@ -7,7 +7,10 @@ const PropertyProvider = (props) => {
     const [properties, setProperties] = useState([])
     const [singleProperty, setSingleProperty] = useState('')
     const context = useContext(UserContext)
-    const { user } = context
+    const { user, showAlert } = context
+
+
+    const [propertyStatusChange, setpropertyStatusChange] = useState(false)
 
     const listProperties = useCallback(async () => {
         if (user) {
@@ -68,12 +71,35 @@ const PropertyProvider = (props) => {
             ])
     })
 
+    const addProperty = useCallback(async(credentials)=>{
+        axios.post(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/addproperty`,credentials,{withCredentials: true})
+        .then((data)=>{
+            setSingleProperty(data.data.property)
+            setpropertyStatusChange(!propertyStatusChange)
+            showAlert("New Property Added")
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    })
+
+    const deleteProperty = useCallback(async(id)=>{
+        axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_API}/property/${id}`, {withCredentials:true})
+        .then((data)=>{
+            console.log(data);
+            setpropertyStatusChange(!propertyStatusChange)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    })
+
     useEffect(() => {
         listProperties();
-    }, [user, singleProperty])
+    }, [user, singleProperty, propertyStatusChange])
 
     return (
-        <PropertyContext.Provider value={{ properties, getProperty, singleProperty, updateProperty }}>
+        <PropertyContext.Provider value={{ properties, getProperty, singleProperty, updateProperty,addProperty, deleteProperty }}>
             {props.children}
         </PropertyContext.Provider>
     )

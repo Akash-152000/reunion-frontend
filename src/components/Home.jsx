@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import heroImage from '../assets/heroImage.jpg'
 import SearchTab from './SearchTab'
 import Header from './Header'
 import PropertyList from './PropertyList'
 
+
 const Home = () => {
+
+    
+
 
     return (
         <>
             <div className='w-100 h-[100vh]'>
+                
                 <img className='object-cover w-full h-full' src={heroImage} alt="Hero Image" />
 
                 <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-70'>

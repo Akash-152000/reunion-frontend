@@ -6,7 +6,7 @@ import UserContext from '../context/User/UserContext'
 function UserDetails() {
 
     const context = useContext(UserContext)
-    const { user, updateUser } = context
+    const { user, updateUser, showAlert } = context
 
     const [loading, setLoading] = useState(true)
     const [editName, setEditName] = useState(false)
@@ -50,6 +50,8 @@ function UserDetails() {
         if(editEmail)setEditEmail(!editEmail)
         if(editAddress)setEditAddress(!editAddress)
         setCredentials({...credentials,name:'',phone:'',email:'',address:''})
+
+        showAlert("User Details Updated!!")
 
     }
 
