@@ -69,7 +69,7 @@ const AddProperty = () => {
     e.preventDefault()
     addProperty(credentials)
     navigate('/myproperties')
-
+    showAlert("Property Added")
   }
 
   return (

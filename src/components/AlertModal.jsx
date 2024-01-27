@@ -14,6 +14,8 @@ const AlertModal = ({ isOpen, onClose, message }) => {
         return () => clearTimeout(timeoutId);
     }, [isOpen, onClose]);
 
+    if(!message) return null
+
     return (
         <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center ${isOpen ? 'visible' : 'hidden'}`}>
             <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50" onClick={onClose}></div>

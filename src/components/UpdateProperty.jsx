@@ -144,8 +144,8 @@ const UpdateProperty = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         updateProperty(id, credentials)
-        // showAlert("Property Details updated")
         window.location.reload();
+        showAlert("Property Details updated")
 
     }
 

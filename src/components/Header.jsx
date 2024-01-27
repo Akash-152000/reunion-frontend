@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import UserContext from '../context/User/UserContext'
 import userImage from '../assets/userImage.jpg'
+import Logo from '../assets/Blueorb-horizontal-logo.png'
 
 const Header = () => {
   const context = useContext(UserContext)
@@ -10,10 +11,22 @@ const Header = () => {
   return (
     <>
       <div className='bg-[#f5f6f7] flex justify-around items-center py-4 sticky top-0 w-full z-40 '>
-        <div className='text-3xl cursor-pointer font-bold'>Logo</div>
-        <Link to='/'>
-          <div className='cursor-pointer font-medium'>Home</div>
-        </Link>
+        <img src={Logo} alt="" />
+        <div className='flex w-[30%] justify-around'>
+          <Link to='/'>
+            <div className='cursor-pointer font-medium'>Home</div>
+          </Link>
+          <Link to='/about'>
+            <div className='cursor-pointer font-medium'>About</div>
+          </Link>
+          <Link to='/contact'>
+            <div className='cursor-pointer font-medium'>Contact</div>
+          </Link>
+          <Link to='/blogs'>
+            <div className='cursor-pointer font-medium'>Blogs</div>
+          </Link>
+        </div>
+
         {!isLoggedIn ?
           <div className='flex'>
             <Link to='/signup'>

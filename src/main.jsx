@@ -10,11 +10,18 @@ import MyProfile from './components/MyProfile.jsx'
 import UpdateProperty from './components/UpdateProperty.jsx'
 import AddProperty from './components/AddProperty.jsx'
 import MyProperties from './components/MyProperties.jsx'
+import UserProvider from './context/User/UserProvider.jsx'
+import About from './components/About.jsx'
+import Contact from './components/Contact.jsx'
+import Blogs from './components/Blogs.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
-    <Route path='/' element={<App />}>
+    <Route path='/' element={<UserProvider><App /></UserProvider>}>
       <Route path="" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/blogs" element={<Blogs />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path = "/myprofile" element={<MyProfile />} />
